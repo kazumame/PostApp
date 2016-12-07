@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">PostApp</string>
+    <string name="button">メモる</string>
+
+    <string-array name="fontList">
+        <item>Arial</item>
+        <item>メイリオ</item>
+        <item>ゴシック</item>
+        <item>明朝</item>
+    </string-array>
+
+    <string-array name="fontColor">
+        <item>ブルー</item>
+        <item>レッド</item>
+        <item>オレンジ</item>
+        <item>パープル</item>
+    </string-array>
+    <string name="title_activity_sub">SubActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+</resources>
