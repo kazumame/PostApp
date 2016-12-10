@@ -1,19 +1,36 @@
 <resources>
     <string name="app_name">PostApp</string>
     <string name="button">メモる</string>
+    <string name="GetButton">画像更新</string>
+    <string name="RefreshButton">リフレッシュ</string>
 
     <string-array name="fontList">
-        <item>Arial</item>
-        <item>メイリオ</item>
-        <item>ゴシック</item>
-        <item>明朝</item>
+        <item>JKフォント</item>
+        <item>コーポレートロゴ</item>
     </string-array>
 
     <string-array name="fontColor">
-        <item>ブルー</item>
-        <item>レッド</item>
-        <item>オレンジ</item>
-        <item>パープル</item>
+        <item>white</item>
+        <item>red</item>
+        <item>black</item>
+    </string-array>
+
+    <string-array name="postPosition">
+        <item>左上</item>
+        <item>上</item>
+        <item>右上</item>
+        <item>左</item>
+        <item>右</item>
+        <item>左下</item>
+        <item>下</item>
+        <item>右下</item>
+    </string-array>
+
+    <string-array name="postColor">
+        <item>水色</item>
+        <item>黄色</item>
+        <item>ピンク</item>
+        <item>緑</item>
     </string-array>
     <string name="title_activity_sub">SubActivity</string>
     <string name="action_settings">Settings</string>

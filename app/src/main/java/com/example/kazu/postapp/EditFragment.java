@@ -1,6 +1,8 @@
 package com.example.kazu.postapp;
 
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -21,7 +24,12 @@ import com.loopj.android.http.RequestParams;
  * Created by kazu on 2016/12/07.
  */
 public class EditFragment extends android.support.v4.app.Fragment {
-     EditText memo;
+    EditText memo;
+    Spinner spinner;
+    Spinner spinner2;
+    Spinner spinner3;
+    Spinner spinner4;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_editor, container,false);
         return view;
@@ -31,6 +39,10 @@ public class EditFragment extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         memo = ((EditText) view.findViewById(R.id.memo));
+        spinner = (Spinner) view.findViewById(R.id.spinner); //フォントの種類
+        spinner2 = (Spinner) view.findViewById(R.id.spinner2); //フォントの色
+        spinner3 = (Spinner) view.findViewById(R.id.spinner3); //場所の指定
+        spinner4 = (Spinner) view.findViewById(R.id.spinner4); //ポストイットのカラー
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -43,17 +55,22 @@ public class EditFragment extends android.support.v4.app.Fragment {
     }
 
     public void click(){
-        Log.d("memo", "click: "+this.memo);
-        final String memo = this.memo.getText().toString();
+        AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        System.out.println(memo + " 確認だよ");
-        params.put("message", memo);
+        //ProgressDialog progress = new ProgressDialog(this);
+        //progress.setTitle("Get page");
+        params.put("message", getMemo());
+        params.put("font", getSpinner(spinner));
+        params.put("color", getSpinner(spinner2));
+        params.put("position",getSpinner(spinner3));
+        params.put("pcolor", getSpinner(spinner4));
 
         //String url = "http://192.168.11.16:9292/memo";
-        String url = "http://n302.herokuapp.com/memo";
+        //String url = "http://n302.herokuapp.com/memo";
+        String url1 = "http://n302.herokuapp.com/maker";
 
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.post(url, params, new AsyncHttpResponseHandler() {
+
+        client.post(url1, params, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -63,6 +80,7 @@ public class EditFragment extends android.support.v4.app.Fragment {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
                 Toast.makeText(getActivity(), memo + "をpostしたよ", Toast.LENGTH_LONG).show();
+                //progressDialog.dismiss();
             }
 
             @Override
@@ -91,5 +109,9 @@ public class EditFragment extends android.support.v4.app.Fragment {
     public String getMemo(){
         Log.d("editor", "memo"+memo);
         return memo.getText().toString();
+    }
+
+    public String getSpinner(Spinner spinner){
+        return (String)spinner.getSelectedItem();
     }
 }

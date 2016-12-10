@@ -2,18 +2,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:orientation="vertical"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.kazu.postapp.SubActivity$PlaceholderFragment">
 
-<ImageView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/imageView"/>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <Button
+            android:id="@+id/GetButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="GetButton"
+            android:text="@string/GetButton" />
+
+        <Button
+            android:id="@+id/RefreshButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="RefreshButton"
+            android:text="@string/RefreshButton" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

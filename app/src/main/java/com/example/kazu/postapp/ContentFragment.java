@@ -34,4 +34,12 @@ public class ContentFragment extends Fragment {
         Picasso.with(getActivity())
                 .load("http://n302.herokuapp.com/check").into(imageview);
     }
+    public void GetButton(View view) {
+        Picasso.with(getActivity())
+                .load("http://n302.herokuapp.com/check").into(imageview);
+    }
+
+    public void RefreshButton(View view) {
+        System.out.println("リフレッシュ\n");
+    }
 }
