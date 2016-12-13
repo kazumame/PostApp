@@ -1,6 +1,7 @@
-<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,35 +22,41 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="106dp"
             android:layout_marginStart="106dp"
-            android:entries="@array/fontList" />
+            android:entries="@array/fontList"
+            android:spinnerMode="dialog" />
 
         <Spinner
             android:id="@+id/spinner2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/fontColor" />
+            android:entries="@array/fontColor"
+            android:spinnerMode="dialog" />
 
         <Spinner
             android:id="@+id/spinner3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/postPosition" />
+            android:entries="@array/postPosition"
+            android:spinnerMode="dialog" />
 
         <Spinner
             android:id="@+id/spinner4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/postColor" />
+            android:entries="@array/postColor"
+            android:spinnerMode="dropdown" />
 
         </LinearLayout>
 
-    <EditText
+    <com.beardedhen.androidbootstrap.BootstrapEditText
         android:id="@+id/memo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="メモを入力してください"
+        android:layout_marginTop="254dp"
         android:maxLength="20"
-        android:layout_marginTop="254dp" />
+        android:hint="メモを入力してください"
+        app:bootstrapSize="lg"
+        app:bootstrapBrand="info" />
 
 </LinearLayout>
 
@@ -60,6 +67,6 @@
         android:layout_gravity="end|bottom"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginBottom="65dp"
+        android:layout_marginBottom="80dp"
         android:src="@drawable/ic_action_send" />
 </FrameLayout>

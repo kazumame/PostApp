@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,29 +10,43 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.kazu.postapp.SubActivity$PlaceholderFragment">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-    <Button
-            android:id="@+id/GetButton"
+        <com.beardedhen.androidbootstrap.BootstrapButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="GetButton"
-            android:text="@string/GetButton" />
-
-        <Button
             android:id="@+id/RefreshButton"
+            android:height="50dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/billingCost"
+            android:layout_marginTop="20dp"
+            app:bootstrapText="{fa-trash}  メモ全削除"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:bootstrapBrand="danger"
+            app:roundedCorners="true"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="RefreshButton"
-            android:text="@string/RefreshButton" />
+            android:id="@+id/UpdateButton"
+            android:height="50dp"
+            android:textStyle="bold"
+            android:layout_below="@+id/billingCost"
+            android:layout_marginTop="20dp"
+            app:bootstrapText="{fa-rotate-right}  更新"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:bootstrapBrand="success"
+            app:roundedCorners="true"/>
 
     </LinearLayout>
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/selectImageView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/selectButton"
+        android:height="50dp"
+        android:textStyle="bold"
+        android:layout_below="@+id/billingCost"
+        android:layout_marginTop="20dp"
+        app:bootstrapText="{fa-hand-o-up}  背景画像選択"
+        app:bootstrapSize="lg"
+        app:buttonMode="regular"
+        app:bootstrapBrand="primary"
+        app:roundedCorners="true"/>
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton"
+        android:height="50dp"
+        android:textStyle="bold"
+        android:layout_below="@+id/billingCost"
+        android:layout_marginTop="20dp"
+        app:bootstrapText="{fa-share-square-o}  画像送信"
+        app:bootstrapSize="lg"
+        app:buttonMode="regular"
+        app:bootstrapBrand="warning"
+        app:roundedCorners="true"/>
+
+</LinearLayout>

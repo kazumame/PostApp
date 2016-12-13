@@ -16,19 +16,18 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-/**
- * Created by kazu on 2016/12/07.
- */
 public class EditFragment extends android.support.v4.app.Fragment {
-    EditText memo;
+    BootstrapEditText memo;
     Spinner spinner;
     Spinner spinner2;
     Spinner spinner3;
     Spinner spinner4;
+    ProgressDialog progressDialog;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_editor, container,false);
@@ -38,7 +37,7 @@ public class EditFragment extends android.support.v4.app.Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        memo = ((EditText) view.findViewById(R.id.memo));
+        memo = ((BootstrapEditText) view.findViewById(R.id.memo));
         spinner = (Spinner) view.findViewById(R.id.spinner); //フォントの種類
         spinner2 = (Spinner) view.findViewById(R.id.spinner2); //フォントの色
         spinner3 = (Spinner) view.findViewById(R.id.spinner3); //場所の指定
@@ -55,6 +54,11 @@ public class EditFragment extends android.support.v4.app.Fragment {
     }
 
     public void click(){
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("データを送信しています");
+        progressDialog.setMessage("しばらくお待ちください");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         //ProgressDialog progress = new ProgressDialog(this);
@@ -79,8 +83,8 @@ public class EditFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
-                Toast.makeText(getActivity(), memo + "をpostしたよ", Toast.LENGTH_LONG).show();
-                //progressDialog.dismiss();
+                Toast.makeText(getActivity(), "postしたよ", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
             }
 
             @Override

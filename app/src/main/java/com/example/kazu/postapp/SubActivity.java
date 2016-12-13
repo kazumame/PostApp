@@ -1,5 +1,6 @@
 package com.example.kazu.postapp;
 
+import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
@@ -22,9 +23,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import java.security.Provider;
 
 public class SubActivity extends AppCompatActivity {
 
@@ -99,26 +103,31 @@ public class SubActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if(position == 1) {
-                return new ContentFragment();
-            } else {
-                return new EditFragment();
+            switch (position) {
+                case 0:
+                    return new SelectFragment();
+                case 1:
+                    return new EditFragment();
+                case 2:
+                    return new ContentFragment();
             }
-
+            return null;
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "つくる";
+                    return "えらぶ";
                 case 1:
+                    return "つくる";
+                case 2:
                     return "みる";
             }
             return null;
