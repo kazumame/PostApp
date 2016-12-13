@@ -38,6 +38,7 @@ public class EditFragment extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         memo = ((BootstrapEditText) view.findViewById(R.id.memo));
+        memo.setTextSize(28.0f); //文字のフォントサイズ指定
         spinner = (Spinner) view.findViewById(R.id.spinner); //フォントの種類
         spinner2 = (Spinner) view.findViewById(R.id.spinner2); //フォントの色
         spinner3 = (Spinner) view.findViewById(R.id.spinner3); //場所の指定
