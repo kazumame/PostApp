@@ -114,12 +114,7 @@ public class ContentFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                // POST終了後にGETを行い描画する
-//                ImageView imageView = (ImageView) findViewById(R.id.imageView);
-//                Uri uri = Uri.parse("http://n302.herokuapp.com/check");
-//                Uri.Builder builder = uri.buildUpon();
-//                GetTask task = new GetTask(imageView);
-//                task.execute(builder);
+
             }
 
 

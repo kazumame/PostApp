@@ -9,7 +9,7 @@
         android:id="@+id/selectImageView"
         android:layout_width="match_parent"
         android:layout_height="600dp"
-        android:layout_weight="0.02" />
+        android:layout_weight="0" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -49,5 +49,22 @@
         app:roundedCorners="true"/>
 
     </LinearLayout>
+
+    <Space android:layout_width="match_parent"
+        android:layout_height="25dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BLE_確認部分"
+        android:id="@+id/textView"
+        android:layout_weight="0" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bleButton"
+        android:text="BLE通信開始"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

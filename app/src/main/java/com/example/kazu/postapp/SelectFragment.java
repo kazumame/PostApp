@@ -3,21 +3,24 @@ package com.example.kazu.postapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
-import android.content.Context;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.ParcelFileDescriptor;
+import android.os.ParcelUuid;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -26,30 +29,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.squareup.picasso.Picasso;
-
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Handler;
 
 import cz.msebera.android.httpclient.entity.mime.content.FileBody;
 
 public class SelectFragment extends Fragment {
     private static final int REQUEST_GALLERY = 0;
     ImageView imageview = null;
+    Bitmap img;
     BootstrapButton selectbutton;
     BootstrapButton imagebutton;
+    Button blebutton;
     String imagePath = null;
     ProgressDialog progressDialog;
     AlertDialog.Builder builder;
+    android.os.Handler mHandler;
+    BluetoothAdapter mBluetoothAdapter;
+    BluetoothManager mBluetoothManager;
+    BluetoothGatt mBluetoothGatt;
+    TextView tv;
+
 
     //Bitmap bmp;
     @Nullable
@@ -71,6 +80,11 @@ public class SelectFragment extends Fragment {
         imageview = (ImageView) view.findViewById(R.id.selectImageView);
         selectbutton = (BootstrapButton) view.findViewById(R.id.selectButton);
         imagebutton = (BootstrapButton) view.findViewById(R.id.imageButton);
+        blebutton = (Button) view.findViewById(R.id.bleButton);
+
+        //確認用です
+        tv = (TextView) view.findViewById(R.id.textView);
+
         selectbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +97,22 @@ public class SelectFragment extends Fragment {
                 postGallery();
             }
         });
+        blebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bleScan();
+            }
+        });
+
+        //BLEを使うための準備
+        mBluetoothManager = (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = mBluetoothManager.getAdapter();
+
+
+        // 6.0以降はコメントアウトした処理をしないと初回はパーミッションがOFFになっています。
+        // requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -102,10 +131,10 @@ public class SelectFragment extends Fragment {
                 imagePath = c.getString(column_index);
                 Log.v("test", "path=" + imagePath);
                 InputStream in = getActivity().getContentResolver().openInputStream(data.getData());
-                Bitmap img = BitmapFactory.decodeStream(in);
+                img = BitmapFactory.decodeStream(in);
                 in.close();
                 // 選択した画像を表示
-                //imageview.setImageBitmap(img);
+                imageview.setImageBitmap(img);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -117,7 +146,6 @@ public class SelectFragment extends Fragment {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, REQUEST_GALLERY);
-
     }
 
     public void postGallery() {
@@ -179,4 +207,11 @@ public class SelectFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    //BLEの実装部分です
+    public int bleScan() {
+        tv.setText("BLE通信開始ボタンが押されました");
+        return 1;
+    }
+
 }
