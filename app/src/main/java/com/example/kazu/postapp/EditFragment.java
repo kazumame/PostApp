@@ -1,6 +1,5 @@
 package com.example.kazu.postapp;
 
-
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -70,7 +68,6 @@ public class EditFragment extends android.support.v4.app.Fragment {
         //String url = "http://n302.herokuapp.com/memo";
         String url1 = "http://n302.herokuapp.com/maker";
 
-
         client.post(url1, params, new AsyncHttpResponseHandler() {
 
             @Override
@@ -91,14 +88,8 @@ public class EditFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onFinish() {
-                // POST終了後にGETを行い描画する
-//                ImageView imageView = (ImageView) findViewById(R.id.imageView);
-//                Uri uri = Uri.parse("http://n302.herokuapp.com/check");
-//                Uri.Builder builder = uri.buildUpon();
-//                GetTask task = new GetTask(imageView);
-//                task.execute(builder);
-            }
 
+            }
 
             @Override
             public void onRetry(int retryNo) {

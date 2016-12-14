@@ -57,7 +57,6 @@ public class ContentFragment extends Fragment {
                 .load("http://n302.herokuapp.com/check").into(imageview);*/
     }
 
-
     public void updateclick() {
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("画像を更新しています");
@@ -116,7 +115,6 @@ public class ContentFragment extends Fragment {
             public void onFinish() {
 
             }
-
 
             @Override
             public void onRetry(int retryNo) {
