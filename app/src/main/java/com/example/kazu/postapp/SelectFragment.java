@@ -37,6 +37,27 @@ public class SelectFragment extends Fragment {
     String imagePath = null;
     ProgressDialog progressDialog;
     AlertDialog.Builder builder;
+		TextView tv;
+
+		private int service_id;
+    private BluetoothManager bluetoothManager;
+    private BluetoothAdapter bluetoothAdapter;
+		private boolean isBleSupported = false;
+		private BluetoothAdapter.LeScanCallback leScanCallback;
+		private BluetoothLeScanner bluetoothLeScanner;
+		private ScanCallback scanCallback;
+		private final String RASPI_UUID = "9E205570-1407-442A-A9BE-0E3AA7420A7A";
+		// BLEスキャンのタイムアウト時間
+		private static final long SCAN_TIME_MS = 10000;
+		private android.os.Handler handler = new Handler();
+		private boolean isGetServiceUUID = false;
+		private boolean isBleScanning = false;
+
+
+
+		//Bitmap bmp;
+		@Nullable
+		@Override
     TextView tv;
 
     @Nullable
@@ -81,6 +102,25 @@ public class SelectFragment extends Fragment {
                 bleScan();
             }
         });
+
+				//BLEを使うための準備
+				bluetoothManager = (BluetoothManager) .getSystemService(Context.BLUETOOTH_SERVICE);
+				bluetoothAdapter = bluetoothManager.getAdapter();
+				isBleSupported = (BluetoothAdapter != null);
+
+				if(isBleSupported){
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+						bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+						initScanCallback();
+					} else {
+						initLeScanCallback();
+					}
+				} else {
+					Toast.makeText(getApplicationContext(), "This device is not support BLE.", Toast.LENGTH_SHORT).show();
+				}
+
+				// 6.0以降はコメントアウトした処理をしないと初回はパーミッションがOFFになっています。
+        // requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
     }
 
     @Override
@@ -181,6 +221,153 @@ public class SelectFragment extends Fragment {
     }
 
     //BLEの実装部分です
+		public int bleScan() {
+			tv.setText("BLE通信開始ボタンが押されました");
+			if (bluetoothAdapter.isEnabled()) {
+				isGetServiceUUID = false;
+				startBLEScan();
+				if (isGetServiceUUID){
+					return service_id;
+				} else {
+					return 0;
+				}
+			} else {
+				Toast.makeText(getApplicationContext(), "Please enable to Bluetooth function.", Toast.LENGTH_SHORT).show();
+				return -1;
+			}
+		}
+
+		private void initScanCallback() {
+			scanCallback = new ScanCallback() {
+				@Override
+				public void onBatchScanResults(List<ScanResult> results) {
+					super.onBatchScanResults(results);
+					for (ScanResult result : results) {
+						scanResult(result.getDevice(), result.getRssi(), result.getScanRecord().getBytes());
+					}
+				}
+
+				@Override
+				public void onScanResult(int callbackType, ScanResult result) {
+					super.onScanResult(callbackType, result);
+					scanResult(result.getDevice(), result.getRssi(), result.getScanRecord().getBytes());
+				}
+
+				@Override
+				public void onScanFailed(int errorCode) {
+					super.onScanFailed(errorCode);
+				}
+			};
+		}
+
+		private void initLeScanCallback() {
+			leScanCallback = new BluetoothAdapter.LeScanCallback() {
+				@Override
+				public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
+					scanResult(device, rssi, scanRecord);
+				}
+			};
+		}
+
+		@SuppressWarnings("deprecation")
+		private void startBLEScan() {
+			if (!isBleScanning) {
+				mHandler.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						if(isBleScanning){
+							Toast.makeText(getApplicationContext(), "Time out BLE scan.", Toast.LENGTH_SHORT).show();
+							stopBLEScan();
+							isBleScanning = false;
+						}
+					}
+				}, SCAN_TIME_MS);
+				isBleScanning = true;
+				judgeStartBLEScan();
+			}
+		}
+
+		@SuppressWarnings("deprecation")
+		private void judgeStartBLEScan() {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				bluetoothLeScanner.startScan(scanCallback);
+			} else {
+				bluetoothAdapter.startLeScan(leScanCallback);
+			}
+			isBleScanning = true;
+		}
+
+		@SuppressWarnings("deprecation")
+		private void stopBLEScan() {
+			if(isBleScanning) {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+					bluetoothLeScanner.stopScan(scanCallback);
+				} else {
+					bluetoothAdapter.stopLeScan(leScanCallback);
+				}
+			}
+			isBleScanning = false;
+		}
+
+		private void scanResult(BluetoothDevice device, int rssi, final byte[] scanRecord) {
+			if(scanRecord.length > 30) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						String uuid  = getUUID(scanRecord);
+						String major = getMajor(scanRecord);
+						// スキャンしたパケットのUUIDが指定したものであればグローバル変数に格納してスキャン終了
+						if(uuid.equals(RASPI_UUID)) {
+							service_id = Integer.parseInt(major);
+							isGetServiceUUID = true;
+							Toast.makeText(getApplicationContext(), "Get RASPI device UUID.\nFinish scan.", Toast.LENGTH_SHORT).show();
+							stopBLEScan();
+							isBleScanning = false;
+							Toast.makeText(getApplicationContext(), "Finish BLE scan successful.", Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(getApplicationContext(), "Get Unknown device UUID.", Toast.LENGTH_SHORT).show();
+						}
+					}
+				});
+			}
+		}
+
+		private String getUUID(byte[] scanRecord) {
+			String uuid = IntToHex2(scanRecord[9] & 0xff)
+				+ IntToHex2(scanRecord[10] & 0xff)
+				+ IntToHex2(scanRecord[11] & 0xff)
+				+ IntToHex2(scanRecord[12] & 0xff)
+				+ "-"
+				+ IntToHex2(scanRecord[13] & 0xff)
+				+ IntToHex2(scanRecord[14] & 0xff)
+				+ "-"
+				+ IntToHex2(scanRecord[15] & 0xff)
+				+ IntToHex2(scanRecord[16] & 0xff)
+				+ "-"
+				+ IntToHex2(scanRecord[17] & 0xff)
+				+ IntToHex2(scanRecord[18] & 0xff)
+				+ "-"
+				+ IntToHex2(scanRecord[19] & 0xff)
+				+ IntToHex2(scanRecord[20] & 0xff)
+				+ IntToHex2(scanRecord[21] & 0xff)
+				+ IntToHex2(scanRecord[22] & 0xff)
+				+ IntToHex2(scanRecord[23] & 0xff)
+				+ IntToHex2(scanRecord[24] & 0xff);
+			return uuid;
+		}
+
+		private String getMajor(byte[] scanRecord) {
+			String hexMajor = IntToHex2(scanRecord[25] & 0xff) + IntToHex2(scanRecord[26] & 0xff);
+			return String.valueOf(Integer.parseInt(hexMajor, 16));
+		}
+
+		// 16進2桁に変換
+		@SuppressLint("DefaultLocale")
+		private String IntToHex2(int i) {
+			char hex_2[]     = { Character.forDigit((i >> 4) & 0x0f, 16), Character.forDigit(i & 0x0f, 16)  };
+			String hex_2_str = new String(hex_2);
+			return hex_2_str.toUpperCase();
+		}
     public int bleScan() {
         tv.setText("BLE通信開始ボタンが押されました");
         return 1;
