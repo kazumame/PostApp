@@ -61,7 +61,7 @@ public class SubActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "えらぶ";
+                    return "みつける";
                 case 1:
                     return "つくる";
                 case 2:

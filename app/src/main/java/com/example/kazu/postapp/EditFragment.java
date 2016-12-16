@@ -22,6 +22,8 @@ public class EditFragment extends android.support.v4.app.Fragment {
     Spinner spinner3;
     Spinner spinner4;
     ProgressDialog progressDialog;
+    public static int ble_id;
+    public int id = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_editor, container,false);
@@ -63,12 +65,14 @@ public class EditFragment extends android.support.v4.app.Fragment {
         params.put("color", getSpinner(spinner2));
         params.put("position",getSpinner(spinner3));
         params.put("pcolor", getSpinner(spinner4));
+        params.put("bleId", ble_id);
+        System.out.println("EditFragment_id: " + ble_id);
 
         //String url = "http://192.168.11.16:9292/memo";
         //String url = "http://n302.herokuapp.com/memo";
-        String url1 = "http://n302.herokuapp.com/maker";
+        String url_maker = "http://n302.herokuapp.com/maker";
 
-        client.post(url1, params, new AsyncHttpResponseHandler() {
+        client.post(url_maker, params, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -83,7 +87,7 @@ public class EditFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
-
+                System.out.println("postできてません");
             }
 
             @Override

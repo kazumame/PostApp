@@ -7,6 +7,9 @@
     <string name="imageButton">POST</string>
     <string name="dlg_title">画像送信エラー</string>
     <string name="dlg_msg">送信する画像が選択されていません</string>
+    <string name="attention">BLE通信を開始してください</string>
+    <string name="intro">本アプリを用いて, 誹謗中傷を行うことは絶対にやめてください.</string>
+    <string name="careful">注意事項</string>
 
     <string-array name="fontList">
         <item>コーポレートロゴ</item>
@@ -23,11 +26,11 @@
         <item>左上</item>
         <item>上</item>
         <item>右上</item>
-        <item>左</item>
         <item>右</item>
-        <item>左下</item>
-        <item>下</item>
         <item>右下</item>
+        <item>下</item>
+        <item>左下</item>
+        <item>左</item>
     </string-array>
 
     <string-array name="postColor">

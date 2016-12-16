@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -17,11 +16,13 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.BinaryHttpResponseHandler;
-import com.squareup.picasso.Picasso;
+import com.loopj.android.http.RequestParams;
 
 public class ContentFragment extends Fragment {
     ImageView imageview;
     ProgressDialog progressDialog;
+    public static int ble_id;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,7 +34,6 @@ public class ContentFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         imageview = (ImageView)view.findViewById(R.id.imageView);
-        //Button getbutton = (Button) view.findViewById(R.id.GetButton);
         BootstrapButton refreshbutton = (BootstrapButton) view.findViewById(R.id.RefreshButton);
         BootstrapButton updatebutton = (BootstrapButton) view.findViewById(R.id.UpdateButton);
         updatebutton.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +67,10 @@ public class ContentFragment extends Fragment {
         AsyncHttpClient client = new AsyncHttpClient();
         String[] allowedContentTypes = new String[]{"image/png", "image/jpeg"};
 
-        client.get("http://n302.herokuapp.com/check",
+        String url_check = "http://n302.herokuapp.com/check";
+
+        RequestParams params = new RequestParams("bleId", ble_id);
+        client.post(url_check, params,
                 new BinaryHttpResponseHandler(allowedContentTypes) {
                     @Override
                     public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] binaryData) {
@@ -92,8 +95,10 @@ public class ContentFragment extends Fragment {
         progressDialog.show();
         System.out.println("リフレッシュ\n");
         AsyncHttpClient client = new AsyncHttpClient();
-        String url = "http://n302.herokuapp.com/refresh";
-        client.get(url, new AsyncHttpResponseHandler() {
+        String url_refresh = "http://n302.herokuapp.com/refresh";
+        RequestParams params = new RequestParams("bleId", ble_id);
+        System.out.println("ContentFragment_id: " + ble_id);
+        client.post(url_refresh, params, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
